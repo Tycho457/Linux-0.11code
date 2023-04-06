@@ -60,10 +60,13 @@ static unsigned char mem_map [ PAGING_PAGES ] = {0,};
  * Get physical address of first (actually last :-) free page, and mark it
  * used. If no free pages left, return 0.
  */
+
+//  用于在主内存区中申请一页空闲内存页，并返回物理内存页的起始地址
 unsigned long get_free_page(void)
 {
 register unsigned long __res asm("ax");
 
+// 内联汇编代码
 __asm__("std ; repne ; scasb\n\t"
 	"jne 1f\n\t"
 	"movb $1,1(%%edi)\n\t"
@@ -400,6 +403,9 @@ void mem_init(long start_mem, long end_mem)
 {
 	int i;
 
+	// mem_map：内存管理
+	// 赋值为100，表示内存被占用
+	// 剩下赋值为0的部分表示未被使用
 	HIGH_MEMORY = end_mem;
 	for (i=0 ; i<PAGING_PAGES ; i++)
 		mem_map[i] = USED;

@@ -107,8 +107,10 @@ void main(void)		/* This really IS void, no error here. */
  * Interrupts are still disabled. Do necessary setups, then
  * enable them
  */
- 	ROOT_DEV = ORIG_ROOT_DEV;
- 	drive_info = DRIVE_INFO;
+ 	ROOT_DEV = ORIG_ROOT_DEV;  //ROOT_DEV：系统的根文件设备号
+ 	drive_info = DRIVE_INFO;	//drive_info：之前 setup.s 程序获取并存储在内存 0x90000 处的设备信息
+	
+	// 计算两个个变量
 	memory_end = (1<<20) + (EXT_MEM_K<<10);
 	memory_end &= 0xfffff000;
 	if (memory_end > 16*1024*1024)
@@ -123,14 +125,14 @@ void main(void)		/* This really IS void, no error here. */
 #ifdef RAMDISK
 	main_memory_start += rd_init(main_memory_start, RAMDISK*1024);
 #endif
-	mem_init(main_memory_start,memory_end);
+	mem_init(main_memory_start,memory_end);	// 主存区
 	trap_init();
 	blk_dev_init();
 	chr_dev_init();
 	tty_init();
 	time_init();
 	sched_init();
-	buffer_init(buffer_memory_end);
+	buffer_init(buffer_memory_end);	// 缓冲区
 	hd_init();
 	floppy_init();
 	sti();

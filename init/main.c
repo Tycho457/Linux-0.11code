@@ -126,16 +126,16 @@ void main(void)		/* This really IS void, no error here. */
 	main_memory_start += rd_init(main_memory_start, RAMDISK*1024);
 #endif
 	mem_init(main_memory_start,memory_end);	// 主存区
-	trap_init();
-	blk_dev_init();
-	chr_dev_init();
-	tty_init();
+	trap_init(); // 中断初始化
+	blk_dev_init(); //块设备请求项初始化
+	chr_dev_init();	// 空函数
+	tty_init();	// 控制台初始化
 	time_init();
-	sched_init();
+	sched_init(); //进程调度初始化
 	buffer_init(buffer_memory_end);	// 缓冲区
-	hd_init();
-	floppy_init();
-	sti();
+	hd_init(); // 硬盘初始化
+	floppy_init();	// 软硬盘的初始化
+	sti(); // 打开中断
 	move_to_user_mode();
 	if (!fork()) {		/* we count on this going ok */
 		init();
